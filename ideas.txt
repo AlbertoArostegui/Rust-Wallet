@@ -1,0 +1,25 @@
+Ideas para la app web de as
+
+LAMP (Linux Apache Mysql PHP)
+
+mysql nginx certbot (para ssl)
+
+
+FRONTEND con un framework (Vue.js tiene una curva de aprendizaje sencilla en teoria)
+SERVER WEB apache
+
+BBDD con mysql o mongodb (posiblemente para almacenar cuentas de usuario??)
+
+BACKEND (node.js es lo fácil, Rust lo divertido)
+
+COLORES
+
+rgb(54, 54, 70) |
+rgb(40, 42, 54) | tonos oscuros
+rgb(20, 23, 27) |
+
+rgb(200, 192, 147) doradito
+
+IDEA:
+    - Hardware antiguo?, una revisión a la historia del hardware, con posibles cuentas de usuario para tener un foro?
+      posibilidad de revisar lo que han sido los servidores, ya que la asignatura va de administración de sistemas.
