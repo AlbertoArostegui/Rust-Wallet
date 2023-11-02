@@ -1,0 +1,1 @@
+INSERT INTO PRUEBA (nombre, age) VALUES ('prueba', 32)

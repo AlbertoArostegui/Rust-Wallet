@@ -23,3 +23,5 @@ rgb(200, 192, 147) doradito
 IDEA:
     - Hardware antiguo?, una revisión a la historia del hardware, con posibles cuentas de usuario para tener un foro?
       posibilidad de revisar lo que han sido los servidores, ya que la asignatura va de administración de sistemas.
+      
+      Opción posible: Vue.js de front, Rust con Diesel de back y postgresql
