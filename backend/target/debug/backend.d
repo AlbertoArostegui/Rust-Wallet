@@ -1,1 +1,1 @@
-C:\Users\alberto\TODO\trabajoAS\backend\target\debug\backend.exe: C:\Users\alberto\TODO\trabajoAS\backend\src\main.rs
+/Users/alberto/Documents/trabajoas/backend/target/debug/backend: /Users/alberto/Documents/trabajoas/backend/src/main.rs
