@@ -1,0 +1,10 @@
+C:\Users\alberto\TODO\trabajoAS\backend\target\debug\deps\bitcoin_private-be9aa18538923597.rmeta: C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\lib.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\error.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\mod.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\buf_encoder.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\display.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\macros.rs
+
+C:\Users\alberto\TODO\trabajoAS\backend\target\debug\deps\bitcoin_private-be9aa18538923597.d: C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\lib.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\error.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\mod.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\buf_encoder.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\display.rs C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\macros.rs
+
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\lib.rs:
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\error.rs:
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\mod.rs:
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\buf_encoder.rs:
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\hex\display.rs:
+C:\Users\alberto\.cargo\registry\src\index.crates.io-6f17d22bba15001f\bitcoin-private-0.1.0\src\macros.rs:

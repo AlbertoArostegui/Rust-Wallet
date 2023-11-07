@@ -1,26 +1,38 @@
-use bdk::{
-    bitcoin::Network,
-    database::MemoryDatabase,
-    Wallet,
-    wallet::AddressIndex,
-};
+use bdk::{SyncOptions, descriptor};
+use bdk::blockchain::ElectrumBlockchain;
+use bdk::electrum_client::Client;
+use bdk::{Wallet, database::MemoryDatabase};
+use bdk::bitcoin::Network;
+use dotenv::{self, from_filename, dotenv};
+use std::env::var;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let external_descriptor = "wpkh(tprv8ZgxMBicQKsPdy6LMhUtFHAgpocR8GC6QmwMSFpZs7h6Eziw3SpThFfczTDh5rW2krkqffa11UpX3XkeTTB2FvzZKWXqPY54Y6Rq4AQ5R8L/84'/0'/0'/0/*)";
-    let internal_descriptor = "wpkh(tprv8ZgxMBicQKsPdy6LMhUtFHAgpocR8GC6QmwMSFpZs7h6Eziw3SpThFfczTDh5rW2krkqffa11UpX3XkeTTB2FvzZKWXqPY54Y6Rq4AQ5R8L/84'/0'/0'/1/*)";
+fn main() -> anyhow::Result<()> {
+    from_filename(".env").ok();
+    dotenv::dotenv().ok();
 
-       let wallet: Wallet<MemoryDatabase> = Wallet::new(
-            external_descriptor,
-            Some(internal_descriptor),
-            Network::Testnet,
-            MemoryDatabase::new(),
-        )?;
+    let descriptor = var("WALLET_DESCRIPTOR").unwrap();
+    dbg!(&descriptor);
 
-    let address = wallet.get_address(AddressIndex::New)?;
-    println!("Generated Address: {}", address);
+    let wallet = Wallet::new(&descriptor, None, Network::Testnet, MemoryDatabase::default())?;
+    let client = Client::new("ssl://electrum.blockstream.info:60002")?;
+    let blockchain = ElectrumBlockchain::from(client);
 
-    Ok(())
-    
+    wallet.sync(&blockchain, SyncOptions::default());
+    let balance = wallet.get_balance();
+    let address = wallet.get_address(bdk::wallet::AddressIndex::New);
 
+    dbg!(balance);
+    dbg!(address);
 }
 
+fn setup() -> String {
+    from_filename(".env");
+    dotenv();
+
+    let descriptor = var("WALLET_DESCRIPTOR");
+
+    match descriptor {
+        Ok(descriptor) => descriptor,
+        Err(_) => "Couldn't fetch WALLET_DESCRIPTOR env variable".to_string()
+    }
+}
