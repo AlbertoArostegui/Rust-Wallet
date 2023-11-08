@@ -1,8 +1,14 @@
 services:
-  db:
+  
+  database:
     image: postgres:16.0-alpine3.18
     restart: always
     environment:
-      - POSTGRES_PASSWORD: placeholder
-        POSTGRES_USER: root
-        POSTGRES_DB: users
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      #Recalcar que al no ser un volumen nombrado, si se hiciese docker-compose down -v, sería borrado
+    ports:
+      - 5432:5432

@@ -1,7 +1,27 @@
 version: '3'
+# Este esel docker-compose utilizado para construir la app entera con todas las imagenes 
 
 services:
-  frontend:
-    image: pelicula
+  
+  database:
+    image: postgres:16.0-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      #Son datos persistentes, cada vez que se reinicia el contenedor, seguirán ahí
+      #Recalcar que al no ser un volumen nombrado, si se hiciese docker-compose down -v, sería borrado
     ports:
-      - "80:80"
+      - 5432:5432
+    
+  backend:
+    image: backend
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@database/users
+    ports:
+      - 8080:8080

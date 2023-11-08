@@ -1,55 +1,63 @@
-#![feature(decl_macro, proc_macro_hygiene)]
-#![allow(proc_macro_derive_resolution_fallback, unused_attributes)]
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use backend::models::*;
+use backend::establish_connection;
+use diesel::prelude::*;
+use std::{thread, time};
 
-#[macro_use]
-extern crate diesel;
-extern crate dotenv;
-extern crate r2d2;
-extern crate r2d2_diesel;
-#[macro_use]
-extern crate rocket;
-extern crate rocket_contrib;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate serde_json;
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    
 
-use dotenv::dotenv;
-use std::env;
-use routes::*;
-use std::process::Command;
+    //Esperamos 0.5s para asegurar que la base de datos estará lista para aceptar conexiones
+    //En caso de que no fuese suficiente porque la base de datos ha crecido mucho, habría que aumentar el tiempo que se espera y reconstruir la imagen
+    let ten_millis = time::Duration::from_millis(500);
+    let now = time::Instant::now();
+    thread::sleep(ten_millis);
+    assert!(now.elapsed() >= ten_millis);
 
-mod db;
-mod models;
-mod routes;
-mod schema;
-
-fn rocket() -> rocket::Rocket {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL").expect("set DATABASE_URL");
-
-    let pool = db::init_pool(database_url);
-    rocket::ignite()
-        .manage(pool)
-        .mount(
-            "/api/v1/",
-            routes![get_all, new_user, find_user],
-        )
+    HttpServer::new(|| {
+        App::new()
+            .app_data(web::Data::new(Conn {
+                conn: &mut establish_connection()
+            }))
+            .service(hello)
+            .service(echo)
+            .route("/users", web::get().to(print_users))
+            .route("/hey", web::get().to(manual_hello))
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
 }
 
-fn main() {
-    let _output = if cfg!(target_os = "windows") {
-        Command::new("cmd")
-            .args(&["/C", "cd ui && npm start"])
-            .spawn()
-            .expect("Failed to start UI Application")
-    } else {
-        Command::new("sh")
-            .arg("-c")
-            .arg("cd ui && npm start")
-            .spawn()
-            .expect("Failed to start UI Application")
-    };
-    rocket().launch();
+#[get("/")]
+async fn hello() -> impl Responder {
+    HttpResponse::Ok().body("Hello world!")
+}
+
+#[post("/echo")]
+async fn echo(req_body: String) -> impl Responder {
+    HttpResponse::Ok().body(req_body)
+}
+
+async fn print_users() -> impl Responder {
+    let connection = &mut establish_connection();
+    use backend::schema::users::dsl::*;
+    let results = users
+        .limit(5)
+        .select(User::as_select())
+        .load(connection)
+        .expect("Error loading users");
+
+    println!("Displaying {} users", results.len());
+    for user in results {
+        println!("{}", user.username);
+        println!("-----------\n");
+        println!("{}", user.first_name);
+    }
+    HttpResponse::Ok().body("eoeo")
+}
+
+async fn manual_hello() -> impl Responder {
+    HttpResponse::Ok().body("Hey there!")
 }
