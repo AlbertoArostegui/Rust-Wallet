@@ -17,9 +17,6 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .app_data(web::Data::new(Conn {
-                conn: &mut establish_connection()
-            }))
             .service(hello)
             .service(echo)
             .route("/users", web::get().to(print_users))
