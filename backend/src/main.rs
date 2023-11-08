@@ -4,6 +4,8 @@ use backend::establish_connection;
 use diesel::prelude::*;
 use std::{thread, time};
 
+mod keygen;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     
@@ -14,6 +16,8 @@ async fn main() -> std::io::Result<()> {
     let now = time::Instant::now();
     thread::sleep(ten_millis);
     assert!(now.elapsed() >= ten_millis);
+
+    let (secret_key, public_key) = keygen::generate_keypair();
 
     HttpServer::new(|| {
         App::new()
