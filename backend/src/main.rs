@@ -18,6 +18,9 @@ async fn main() -> std::io::Result<()> {
     assert!(now.elapsed() >= ten_millis);
 
     let (secret_key, public_key) = keygen::generate_keypair();
+    print!("Secret key: {}", secret_key.display_secret());
+    print!("Public key: {}", public_key.to_string());
+    print!("Public address: {}", keygen::public_key_address(&public_key));
 
     HttpServer::new(|| {
         App::new()
