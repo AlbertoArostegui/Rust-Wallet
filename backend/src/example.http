@@ -1,0 +1,9 @@
+POST http://localhost:8080/prueba
+Host: localhost
+Content-Type: application/json
+Content-Length:  
+
+
+{
+    "username": "prueba username"
+}
