@@ -9,23 +9,18 @@
       };
     },
     methods: {
-        logName() {
-            console.log('Name is: ' + this.name);
-        },
         async postData() {
-            const response = await fetch('http://'+this.host+':8080/prueba/', {
-                mode: 'cors',
+            const response = await fetch('http://'+this.host+':8080/prueba', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Content-Length':  '',
                 },
                 body: JSON.stringify({
                     name: this.name,
                     email: this.email
                 }),
             });
-            const data = await response.json();
-            console.log(data);
         },
     },
     mounted() {

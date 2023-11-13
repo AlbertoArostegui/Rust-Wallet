@@ -15,7 +15,7 @@ console.log('Montado app.vue')
           </div>
           <div class="navbar-right">
             <RouterLink to="/login">Login</RouterLink>
-            <RouterLink to="/login">Register</RouterLink>
+            <RouterLink to="/register">Register</RouterLink>
           </div>
           
         </nav>
