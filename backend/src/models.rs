@@ -6,5 +6,5 @@ use diesel::prelude::*;
 pub struct User {
     pub id: i32,
     pub username: String,
-    pub first_name: String
+    pub first_name: String,
 }

@@ -43,3 +43,25 @@ pub async fn prueba(json: web::Json<Info>) -> Result<String> {
     println!("{}", response);
     Ok(response)
 }
+
+struct Email {
+    email: String,
+}
+
+#[post("/checkEmailExists")]
+pub async fn checkEmailExists(json: web::Json<Email>) -> impl Responder {
+    let connection = &mut establish_connection();
+
+    use backend::schema::users::dsl::*;
+    let results = users
+        .filter(email.eq(&json.email))
+        .select(User::as_select())
+        .load(connection)
+        .expect("Error loading users");
+
+    if results.len() == 0 {
+        HttpResponse::Ok().body("false")
+    } else {
+        HttpResponse::Ok().body("true")
+    }
+}
