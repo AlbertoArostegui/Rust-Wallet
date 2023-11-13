@@ -1,3 +1,4 @@
+use actix_web::middleware::DefaultHeaders;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use actix_cors::Cors;
 use backend::models::*;
@@ -48,7 +49,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::permissive();
         App::new()
-            .service(web_methods::hello)
+            .wrap(cors)
             .service(web_methods::prueba)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
