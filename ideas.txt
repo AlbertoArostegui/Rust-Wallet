@@ -24,3 +24,6 @@ IDEA:
       
       Opción posible: Vue.js de front, Rust con Diesel de back y postgresql
       Wallet crypto
+
+      Cuarta imagen ngnix para tener un balanceador de carga, me parece que es implementable con un ingress, hace
+      falta buscar más información

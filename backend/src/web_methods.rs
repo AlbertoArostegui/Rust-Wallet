@@ -33,11 +33,13 @@ async fn print_users() -> impl Responder {
 }
 #[derive(Deserialize)]
 struct Info {
-    username: String,
+    name: String,
+    email: String,
 }
 
 #[post("/prueba")]
 pub async fn prueba(json: web::Json<Info>) -> Result<String> {
-    println!("Welcome {}!", json.username);
-    Ok(format!("Welcome {}!", json.username))
+    let response = format!("Welcome {}! with email {}", json.name, json.email);
+    println!("{}", response);
+    Ok(response)
 }

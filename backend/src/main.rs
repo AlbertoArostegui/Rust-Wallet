@@ -1,4 +1,5 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_cors::Cors;
 use backend::models::*;
 use backend::establish_connection;
 use diesel::prelude::*;
@@ -30,8 +31,7 @@ async fn main() -> std::io::Result<()> {
     
     //let wallet_instance = walgen::Wallet::new(&secret_key, &public_key);
     //wallet_instance.save_to_file("crypto_wallet.json");
-    
-    let wallet_instance = walgen::Wallet::from_file("crypto_wallet.json").unwrap();
+    /*let wallet_instance = walgen::Wallet::from_file("crypto_wallet.json").unwrap();
     println!("Public key: {}", wallet_instance.public_address.to_string());
 
     let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
@@ -42,8 +42,11 @@ async fn main() -> std::io::Result<()> {
 
     let balance = wallet_instance.get_eth_balance(&web3_conn).await.unwrap();
     println!("Balance: {balance}");
+     */
+    
 
     HttpServer::new(|| {
+        let cors = Cors::permissive();
         App::new()
             .service(web_methods::hello)
             .service(web_methods::prueba)

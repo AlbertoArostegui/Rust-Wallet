@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+console.log('Montado app.vue')
 </script>
 
 <template>
