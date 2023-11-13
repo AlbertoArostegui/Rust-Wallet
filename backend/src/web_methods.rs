@@ -47,7 +47,7 @@ pub async fn prueba(json: web::Json<Info>) -> Result<String> {
 struct Email {
     email: String,
 }
-
+/* 
 #[post("/checkEmailExists")]
 pub async fn checkEmailExists(json: web::Json<Email>) -> impl Responder {
     let connection = &mut establish_connection();
@@ -64,4 +64,4 @@ pub async fn checkEmailExists(json: web::Json<Email>) -> impl Responder {
     } else {
         HttpResponse::Ok().body("true")
     }
-}
+}*/

@@ -13,6 +13,7 @@ mod web_methods;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
     dotenv::dotenv().ok();
 
     //Esperamos 0.5s para asegurar que la base de datos estará lista para aceptar conexiones
@@ -21,6 +22,22 @@ async fn main() -> std::io::Result<()> {
     let now = time::Instant::now();
     thread::sleep(ten_millis);
     assert!(now.elapsed() >= ten_millis);
+
+    let connection = &mut establish_connection();
+
+    use backend::schema::users::dsl::*;
+    let results = users
+        .limit(5)
+        .select(User::as_select())
+        .load(connection)
+        .expect("Error loading users");
+
+    println!("Displaying {} users", results.len());
+    for user in results {
+        println!("{}", user.username);
+        println!("-----------\n");
+        println!("{}", user.first_name);
+    }
 
     /*
     let (secret_key, public_key) = walgen::generate_keypair();
