@@ -5,6 +5,11 @@ use diesel::prelude::*;
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {
     pub id: i32,
-    pub username: String,
-    pub first_name: String,
+    pub name: String,
+    pub email: String,
+    pub hashed_password: String,
+    pub salt: String,
+    pub private_key: String,
+    pub public_key: String,
+    pub address: String,
 }

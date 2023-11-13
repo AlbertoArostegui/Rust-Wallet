@@ -34,9 +34,9 @@ async fn main() -> std::io::Result<()> {
 
     println!("Displaying {} users", results.len());
     for user in results {
-        println!("{}", user.username);
+        println!("{}", user.name);
         println!("-----------\n");
-        println!("{}", user.first_name);
+        println!("{}", user.email);
     }
 
     /*
@@ -68,6 +68,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .service(web_methods::prueba)
+            .service(web_methods::checkEmailExists)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })

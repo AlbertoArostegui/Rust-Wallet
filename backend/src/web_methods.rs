@@ -2,6 +2,7 @@ use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result
 use backend::models::*;
 use backend::establish_connection;
 use diesel::prelude::*;
+use serde_derive::Serialize;
 use std::env;
 use serde::Deserialize;
 use std::{thread, time};
@@ -25,9 +26,9 @@ async fn print_users() -> impl Responder {
 
     println!("Displaying {} users", results.len());
     for user in results {
-        println!("{}", user.username);
+        println!("{}", user.name);
         println!("-----------\n");
-        println!("{}", user.first_name);
+        println!("{}", user.email);
     }
     HttpResponse::Ok().body("eoeo")
 }
@@ -43,13 +44,17 @@ pub async fn prueba(json: web::Json<Info>) -> Result<String> {
     println!("{}", response);
     Ok(response)
 }
-
+#[derive(Deserialize)]
 struct Email {
     email: String,
 }
-/* 
+#[derive(Serialize)]
+struct EmailExists {
+    email_exists: bool,
+}
+
 #[post("/checkEmailExists")]
-pub async fn checkEmailExists(json: web::Json<Email>) -> impl Responder {
+pub async fn checkEmailExists(json: web::Json<Email>) -> web::Json<EmailExists> {
     let connection = &mut establish_connection();
 
     use backend::schema::users::dsl::*;
@@ -60,8 +65,8 @@ pub async fn checkEmailExists(json: web::Json<Email>) -> impl Responder {
         .expect("Error loading users");
 
     if results.len() == 0 {
-        HttpResponse::Ok().body("false")
+        web::Json(EmailExists { email_exists: false })
     } else {
-        HttpResponse::Ok().body("true")
+        web::Json(EmailExists { email_exists: true })
     }
-}*/
+}
