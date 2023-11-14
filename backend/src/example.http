@@ -1,9 +1,11 @@
-POST http://localhost:8080/checkEmailExists
+POST http://localhost:8080/checkPassword
 Host: localhost
 Content-Type: application/json
 Content-Length:  
 
 
 {
-    "email": "al"
+    "name": "david",
+    "password": "peliculero",
+    "email": "emailPrueba"
 }

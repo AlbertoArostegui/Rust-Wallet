@@ -7,8 +7,8 @@ use diesel::prelude::*;
 use std::env;
 use std::{thread, time};
 
-mod walgen;
 mod utils;
+mod walgen;
 mod web_methods;
 
 #[actix_web::main]
@@ -68,7 +68,9 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .service(web_methods::prueba)
-            .service(web_methods::checkEmailExists)
+            .service(web_methods::check_email_exists)
+            .service(web_methods::create_new_user)
+            .service(web_methods::check_password)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })
