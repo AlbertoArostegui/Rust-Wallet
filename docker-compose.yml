@@ -2,13 +2,22 @@ version: '3'
 # Este esel docker-compose utilizado para construir la app entera con todas las imagenes 
 
 services:
-  
+  frontend:
+    image: albertoarostegui/frontend
+    ports:
+      - 80:80
   database:
     image: albertoarostegui/db-postgres
     restart: always
+      
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./db/data:/var/lib/postgresql/data
       #Recalcar que al no ser un volumen nombrado, si se hiciese docker-compose down -v, sería borrado
+      #El volumen existe mientras la carpeta no se borre, si la carpeta se borra y se haced un prune, la informacion se pierde
+      #Si la carpeta se borra pero no se hace prune, la informacion sigue en pie
+      #Y si se hace un prune, pero la carpeta no se borra, la informacion sigue en pie
     ports:
       - 5432:5432
     

@@ -73,6 +73,7 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
 
 #[post("/checkPassword")]
 pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
+    println!("Checking if password matchers");
     let connection = &mut establish_connection();
     let new_email = &json.email;
     let new_password = &json.password;
@@ -91,6 +92,7 @@ pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
         let user = &results[0];
         let password_matches = utils::check_hash(&new_password, &user.salt, &user.hashed_password);
         if password_matches {
+            println!("Password matches");
             HttpResponse::Ok().body("Password matches")
         } else {
             HttpResponse::Ok().body("Password does not match")

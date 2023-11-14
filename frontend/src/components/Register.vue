@@ -36,7 +36,7 @@
         },
 
         async registerUser() {
-            const response = await fetch('http://'+this.host+':8080/register', {
+            const response = await fetch('http://'+this.host+':8080/createNewUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

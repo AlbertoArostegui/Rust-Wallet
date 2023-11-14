@@ -1,0 +1,9 @@
+POST http://localhost:8080/checkEmailExists
+Host: localhost
+Content-Type: application/json
+Content-Length:  
+
+ 
+{  
+    "email": "emaildeprueba@prueba.prueba"
+}
