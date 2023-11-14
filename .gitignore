@@ -1,3 +1,2 @@
 backend/target
 backend/*.json
-db/data/**
