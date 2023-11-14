@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+    role: leader
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+        role: leader
+        tier: backend
+    spec:
+      containers:
+      - name: leader
+        image: "albertoarostegui/backend"
+        env:
+          - name: DATABASE_URL
+            value: "postgres://postgres:postgres@database:5432/users"
+          - name: INFURA_RINKEBY_WS
+            value: "wss://sepolia.infura.io/ws/v3/b2129f62b6624bee9771437114f5d9a4"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080

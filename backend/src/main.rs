@@ -18,13 +18,14 @@ async fn main() -> std::io::Result<()> {
 
     //Esperamos 0.5s para asegurar que la base de datos estará lista para aceptar conexiones
     //En caso de que no fuese suficiente porque la base de datos ha crecido mucho, habría que aumentar el tiempo que se espera y reconstruir la imagen
+    //Si es la primera vez que se ejecuta el compose entero, la bbdd necesita hacer una serie de inicializaciones, por lo que seria mejor subir el tiempo a alrededor de 5s.
     let ten_millis = time::Duration::from_millis(500);
     let now = time::Instant::now();
     thread::sleep(ten_millis);
     assert!(now.elapsed() >= ten_millis);
-
+    /*
     let connection = &mut establish_connection();
-
+    
     use backend::schema::users::dsl::*;
     let results = users
         .limit(5)
@@ -39,7 +40,7 @@ async fn main() -> std::io::Result<()> {
         println!("{}", user.email);
     }
 
-    /*
+    
     let (secret_key, public_key) = walgen::generate_keypair();
     let public_address = walgen::public_key_address(&public_key);
     println!("Secret key: {}", secret_key.display_secret());
