@@ -7,7 +7,7 @@ services:
     image: albertoarostegui/db-postgres
     restart: always
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./db/data:/var/lib/postgresql/data
       #Recalcar que al no ser un volumen nombrado, si se hiciese docker-compose down -v, sería borrado
     ports:
       - 5432:5432
