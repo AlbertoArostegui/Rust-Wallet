@@ -68,7 +68,6 @@ async fn main() -> std::io::Result<()> {
         let cors = Cors::permissive();
         App::new()
             .wrap(cors)
-            .service(web_methods::prueba)
             .service(web_methods::check_email_exists)
             .service(web_methods::create_new_user)
             .service(web_methods::check_password)
