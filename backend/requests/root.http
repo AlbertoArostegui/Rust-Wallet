@@ -1,5 +1,6 @@
-GET http://localhost/
+GET http://localhost/api/hey
 Host: localhost
 Content-Type: 
 
 
+ 

@@ -5,7 +5,7 @@ Content-Length:
 
 
 {
-    "name": "alberto",
+    "name": "alberto", 
     "password": "pruebaContraseña",
     "email": "emaildeprueba@docker.io"
 }
