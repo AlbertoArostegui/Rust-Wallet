@@ -4,8 +4,7 @@ version: '3'
 services:
   frontend:
     image: albertoarostegui/frontend
-    ports:
-      - 80:80
+
   database:
     image: albertoarostegui/db-postgres
     restart: always
@@ -27,5 +26,14 @@ services:
       - database
     environment:
       DATABASE_URL: postgres://postgres:postgres@database/users
+    
+  nginx:
+    image: albertoarostegui/nginx
+    build: ./nginx
     ports:
-      - 8080:8080
+      - 80:80
+    volumes:
+      - ./nginx:/etc/nginx:ro
+    depends_on:
+      - frontend
+      - backend

@@ -3,8 +3,6 @@
     name: 'Inicio',
     data() {
       return {
-        host: 'localhost',
-        endpoint: 'checkEmailExists',
         name: '',
         email: '',
         password: '',
@@ -22,7 +20,7 @@
         },
 
         async checkEmailExists() {
-            const response = await fetch('http://'+this.host+':8080/' + this.endpoint, {
+            const response = await fetch('/api/checkEmailExists', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +34,7 @@
         },
 
         async registerUser() {
-            const response = await fetch('http://'+this.host+':8080/createNewUser', {
+            const response = await fetch('/api/createNewUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

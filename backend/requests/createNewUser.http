@@ -1,4 +1,4 @@
-POST http://localhost:8080/createNewUser
+POST http://localhost/api/createNewUser
 Host: localhost
 Content-Type: application/json
 Content-Length:  

@@ -1,9 +1,9 @@
-POST http://localhost:8080/checkEmailExists
+POST http://localhost/api/checkEmailExists
 Host: localhost
 Content-Type: application/json
 Content-Length:  
 
- 
+  
 {  
-    "email": "emaildeprueba@prueba.prueba"
+    "email": "emaildeprueba@docker.io"
 }
