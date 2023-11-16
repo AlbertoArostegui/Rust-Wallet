@@ -1,0 +1,11 @@
+POST http://localhost/api/createNewUser
+Host: localhost
+Content-Type: application/json
+Content-Length:  
+
+
+{
+    "name": "alberto", 
+    "password": "pruebaContraseña",
+    "email": "emaildeprueba@docker.io"
+}

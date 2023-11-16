@@ -9,43 +9,6 @@ use serde::Deserialize;
 use crate::utils;
 use crate::walgen;
 
-#[get("/")]
-pub async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/userExists/:user")]
-async fn print_users() -> impl Responder {
-
-    let connection = &mut establish_connection();
-
-    use backend::schema::users::dsl::*;
-    let results = users
-        .limit(5)
-        .select(User::as_select())
-        .load(connection)
-        .expect("Error loading users");
-
-    println!("Displaying {} users", results.len());
-    for user in results {
-        println!("{}", user.name);
-        println!("-----------\n");
-        println!("{}", user.email);
-    }
-    HttpResponse::Ok().body("eoeo")
-}
-#[derive(Deserialize)]
-struct Info {
-    name: String,
-    email: String,
-}
-
-#[post("/prueba")]
-pub async fn prueba(json: web::Json<Info>) -> Result<String> {
-    let response = format!("Welcome {}! with email {}", json.name, json.email);
-    println!("{}", response);
-    Ok(response)
-}
 #[derive(Deserialize)]
 struct Email {
     email: String,
@@ -110,6 +73,7 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
 
 #[post("/checkPassword")]
 pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
+    println!("Checking if password matchers");
     let connection = &mut establish_connection();
     let new_email = &json.email;
     let new_password = &json.password;
@@ -128,6 +92,7 @@ pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
         let user = &results[0];
         let password_matches = utils::check_hash(&new_password, &user.salt, &user.hashed_password);
         if password_matches {
+            println!("Password matches");
             HttpResponse::Ok().body("Password matches")
         } else {
             HttpResponse::Ok().body("Password does not match")
