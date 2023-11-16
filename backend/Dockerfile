@@ -8,6 +8,5 @@ RUN apt-get update && apt-get install libpq-dev -y && rm -rf /var/lib/apt/lists/
 ENV LD_LIBRARY_PATH=/path/to/library:$LD_LIBRARY_PATH
 COPY --from=builder /usr/local/cargo/bin/backend /usr/local/bin/backend
 COPY .env .
-RUN cargo install diesel_cli
-RUN diesel setup
+
 CMD ["backend"]

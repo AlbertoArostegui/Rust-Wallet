@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { useRouter } from 'vue-router';
   export default {
     name: 'Inicio',
     data() {
@@ -12,12 +13,16 @@
     },
     methods: {
         async handleRegister() {
+            const router = useRouter();
+            router.push({name: 'home'});
             const response = await this.checkEmailExists();
             console.log(response);
             if (response.emailExists) {
                 alert('Email already exists');
             } else {
                 this.registerUser();
+                const router = useRouter();
+                router.push('/');
             }
         },
 
