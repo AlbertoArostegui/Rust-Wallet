@@ -19,6 +19,7 @@
                   alert('Email already exists');
               } else {
                   this.registerUser();
+                  this.$store.dispatch('login', this.email)
                   this.$router.push('/');
               }
             } else {

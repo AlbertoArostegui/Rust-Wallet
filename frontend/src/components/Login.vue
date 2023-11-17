@@ -16,7 +16,7 @@
             if (response.password_matches) {
                 this.password_error = 'Email or password are incorrect';
             } else {
-                await this.$store.dispatch('login', this.email)
+                this.$store.dispatch('login', this.email)
                 this.$router.push('/');
             } 
         },

@@ -1,7 +1,12 @@
 // src/store.js or src/store.ts
-import { createStore } from 'vuex'
+import { createStore, Store as VuexStore } from 'vuex'
 
-export default createStore({
+export type State = {
+  user: null | { [key: string]: any }; // replace { [key: string]: any } with the actual type of your user
+  is_logged_in: boolean;
+}
+
+export default createStore<State>({
   state: {
     user: null,
     is_logged_in: false
