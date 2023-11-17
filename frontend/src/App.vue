@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-console.log('Montado app.vue')
+import { useStore } from 'vuex';
+import { computed } from 'vue';
+const store = useStore();
+const is_logged_in = computed(() => store.state.is_logged_in);
+console.log(is_logged_in);
 </script>
 
 <template>
@@ -11,9 +15,13 @@ console.log('Montado app.vue')
           <div class="navbar-left">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
-            <RouterLink to="/forum">Forum</RouterLink>
+            <RouterLink to="/charts">Charts</RouterLink>
+            <RouterLink v-if="is_logged_in" to="/my-page">My Page</RouterLink>
           </div>
-          <div class="navbar-right">
+          <div v-if="is_logged_in" class="navbar-right">
+            <RouterLink to="/logout">Logout</RouterLink>
+          </div>
+          <div v-else class="navbar-right">
             <RouterLink to="/login">Login</RouterLink>
             <RouterLink to="/register">Register</RouterLink>
           </div>

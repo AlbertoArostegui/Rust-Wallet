@@ -34,16 +34,7 @@
     <div class="texto">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia consequuntur corrupti. Alias illo recusandae earum quibusdam tempora autem, perspiciatis optio libero, ducimus iusto, cum error facere? Eveniet, rem iste. Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae ratione odit facilis quis, eaque blanditiis tempore temporibus est a nihil voluptatibus maiores corrupti quam, ipsum aliquid illo, at magni? Earum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, laborum excepturi. Dolorem ex consequatur, veniam molestias at cum. Tenetur aspernatur architecto, suscipit praesentium laborum illo rem nostrum molestias et laudantium!
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim rerum illum culpa nulla perspiciatis beatae commodi! Ratione optio officiis tenetur. Eligendi officia at sequi numquam nesciunt similique illo expedita eveniet!
-        <br><br>Peliculeo intenso
-    </div>
-    <div>
-        <form @submit.prevent="postData">
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name">
-        <label for="email">Email:</label>
-        <input type="text" id="email" v-model="email">
-        <button type="submit">Log Name</button>
-        </form>
+        
     </div>
 
 </body>

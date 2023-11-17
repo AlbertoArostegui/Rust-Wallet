@@ -62,11 +62,12 @@ impl Wallet {
         Ok(())
     }
 
-    pub fn from_file(file_path: &str) -> Result<Wallet> {
-        let file = OpenOptions::new().read(true).open(file_path)?;
-        let buf_reader = BufReader::new(file);
-
-        let wallet: Wallet = serde_json::from_reader(buf_reader)?;
+    pub fn from_params(secret_key: &str, public_key: &str, address: &str) -> Result<Wallet> {
+        let wallet: Wallet = Wallet {
+            secret_key: secret_key.to_string(),
+            public_key: public_key.to_string(),
+            public_address: address.to_string(),
+        };
        
         Ok(wallet)
     }

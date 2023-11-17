@@ -1,3 +1,5 @@
+use std::env;
+
 use actix_web::{get, post, web, HttpResponse, Responder, Result};
 use backend::models::*;
 use backend::establish_connection;
@@ -8,15 +10,37 @@ use serde::Deserialize;
 
 use crate::utils;
 use crate::walgen;
+use crate::walgen::Wallet;
+use crate::walgen::establish_web3_connection;
+
+//POST
 
 #[derive(Deserialize)]
 struct Email {
     email: String,
 }
+#[derive(Deserialize)]
+struct NewUser {
+    name: String,
+    email: String,
+    password: String,
+}
+
+//GET
+
+#[derive(Serialize)]
+struct Balance {
+    balance: f64,
+}
 #[derive(Serialize)]
 struct EmailExists {
     email_exists: bool,
 }
+#[derive(Serialize)]
+struct PasswordMatches {
+    password_matches: bool,
+}
+
 
 #[post("/checkEmailExists")]
 pub async fn check_email_exists(json: web::Json<Email>) -> web::Json<EmailExists> {
@@ -36,12 +60,6 @@ pub async fn check_email_exists(json: web::Json<Email>) -> web::Json<EmailExists
     }
 }
 
-#[derive(Deserialize)]
-struct NewUser {
-    name: String,
-    email: String,
-    password: String,
-}
 
 #[post("/createNewUser")]
 pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
@@ -72,7 +90,7 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
 }
 
 #[post("/checkPassword")]
-pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
+pub async fn check_password(json: web::Json<NewUser>) -> web::Json<PasswordMatches> {
     println!("Checking if password matchers");
     let connection = &mut establish_connection();
     let new_email = &json.email;
@@ -87,15 +105,53 @@ pub async fn check_password(json: web::Json<NewUser>) -> impl Responder {
         .expect("Error loading users");
 
     if results.len() == 0 {
-        HttpResponse::Ok().body("User does not exist")
+        println!("Couldnt find user");
+        web::Json(PasswordMatches { password_matches: false })
     } else {
         let user = &results[0];
         let password_matches = utils::check_hash(&new_password, &user.salt, &user.hashed_password);
         if password_matches {
             println!("Password matches");
-            HttpResponse::Ok().body("Password matches")
+            web::Json(PasswordMatches { password_matches: true })
         } else {
-            HttpResponse::Ok().body("Password does not match")
+            web::Json(PasswordMatches { password_matches: false })
         }
     }
+}
+
+#[get("/getBalance")]
+pub async fn get_balance(json: web::Json<Email>) -> Result<web::Json<Balance>> {
+    println!("Checking if password matchers");
+    let connection = &mut establish_connection();
+    let user_email = &json.email;
+    let mut balance: f64 = 0.0;
+
+    use backend::schema::users::dsl::*;
+
+    let results = users
+        .select(User::as_select())
+        .filter(email.eq(&user_email))
+        .load(connection)
+        .expect("Error loading users");
+
+    if results.len() == 0 {
+        println!("Couldnt find user");
+    } else {
+        let user = &results[0];
+        let user_address = &user.address;
+        let user_public_key = &user.public_key;
+        let user_secret_key = &user.private_key;
+    
+        let wallet_instance: Wallet = Wallet::from_params(
+            &user_secret_key,
+            &user_public_key,
+            &user_address,
+        ).unwrap();
+        
+        let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
+        let web3_conn = establish_web3_connection(&endpoint).await;
+        balance = wallet_instance.get_eth_balance(&web3_conn).await.unwrap();
+    }
+    
+    Ok(web::Json(Balance { balance }))
 }

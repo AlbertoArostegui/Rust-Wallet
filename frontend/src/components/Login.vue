@@ -6,52 +6,32 @@
         name: '',
         email: '',
         password: '',
-        password_repeat: '',
         password_error: ''
       };
     },
     methods: {
-        async handleRegister() {
-            if (this.password === this.password_repeat) {
-              const response = await this.checkEmailExists();
-              console.log(response);
-              if (response.emailExists) {
-                  alert('Email already exists');
-              } else {
-                  this.registerUser();
-                  this.$router.push('/');
-              }
+        async handleLogin() {
+            const response = await this.checkPassword();
+            console.log(response);
+            if (response.password_matches) {
+                this.password_error = 'Email or password are incorrect';
             } else {
-              this.password_error = 'Passwords do not match';
-              return false;
-            }
+                await this.$store.dispatch('login', this.email)
+                this.$router.push('/');
+            } 
         },
 
-        async checkEmailExists() {
-            const response = await fetch('/api/checkEmailExists', {
+        async checkPassword() {
+            const response = await fetch('/api/checkPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Content-Length':  '',
                 },
                 body: JSON.stringify({
-                    email: this.email
-                }),
-            });
-            return response.json();
-        },
-
-        async registerUser() {
-            const response = await fetch('/api/createNewUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length':  '',
-                },
-                body: JSON.stringify({
-                    name: this.name,
+                    name: '',
                     email: this.email,
-                    password: this.password
+                    password: this.password,
                 }),
             });
             return response.json();
@@ -64,11 +44,7 @@
   
 </script>
 <template>
-  <form class="form" @submit.prevent="handleRegister">
-    <div class="form-group">
-      <label for="name" class="form-label">Nombre</label>
-      <input type="text" id="name" class="form-input" v-model="name"/>
-    </div>
+  <form class="form" @submit.prevent="handleLogin">
     <div class="form-group">
       <label for="email" class="form-label">Email</label>
       <input type="email" id="email" class="form-input" v-model="email"/>
@@ -77,13 +53,8 @@
       <label for="password" class="form-label">Password</label>
       <input type="password" id="password" class="form-input" v-model="password"/>
     </div>
-    <div class="form-group">
-      <label for="password-repeat" class="form-label">Repeat Password</label>
-      <input type="password" id="password" class="form-input" v-model="password_repeat"/>
-      <p v-if="password_error" class="error-text">{{ password_error }}</p>
-    </div>
     <div id="register-button">
-      <button type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-primary">Log in</button>
     </div>
     
   </form>
