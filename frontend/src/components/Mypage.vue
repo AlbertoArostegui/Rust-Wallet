@@ -28,7 +28,7 @@ export default {
     },
   },
   async created() {
-    console.log('Mypage was created!!!');
+    console.log('Mypage was created!!!!');
     await this.showBalance();
     console.log('Mypage finished creating! la pelicula es considerable')
   }
@@ -41,6 +41,7 @@ export default {
         <p>?????</p>
         <p>??2</p>
         <h2>{{ balance }}</h2>
+        <p>balance no tira</p>
     </div>
 </body>
 </template>
