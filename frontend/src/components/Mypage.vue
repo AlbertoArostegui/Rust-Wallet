@@ -28,9 +28,9 @@ export default {
     },
   },
   async created() {
-    console.log('Mypage was created!');
+    console.log('Mypage was created!!!');
     await this.showBalance();
-    console.log('Mypage finished creating!')
+    console.log('Mypage finished creating! la pelicula es considerable')
   }
 }
 </script>
@@ -38,9 +38,8 @@ export default {
 <body>
     <div id="balance">
         <h1>Balance</h1>
-        <button @click="showBalance"></button>
-        <h2>balance {{ balance }}</h2>
-        <h2 v-if="balance">v-if balance</h2>
+        <p>?????</p>
+        <p>??2</p>
     </div>
 </body>
 </template>
