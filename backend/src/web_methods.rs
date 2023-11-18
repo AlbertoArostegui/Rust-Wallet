@@ -13,7 +13,7 @@ use crate::walgen;
 use crate::walgen::Wallet;
 use crate::walgen::establish_web3_connection;
 
-//POST
+//Request
 
 #[derive(Deserialize)]
 struct Email {
@@ -26,7 +26,7 @@ struct NewUser {
     password: String,
 }
 
-//GET
+//Response
 
 #[derive(Serialize)]
 struct Balance {
@@ -73,6 +73,9 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
     let (new_hashed_password, new_salt) = utils::hash_password(new_password);
     let (new_secret_key, new_public_key) = walgen::generate_keypair();
     let new_public_address = walgen::public_key_address(&new_public_key);
+    let new_public_address = format!("{:?}", new_public_address);
+
+
 
     let _ = insert_into(users)
         .values((
@@ -82,7 +85,7 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
             salt.eq(new_salt),
             private_key.eq(new_secret_key.display_secret().to_string()),
             public_key.eq(new_public_key.to_string()),
-            address.eq(new_public_address.to_string()),
+            address.eq(new_public_address),
         ))
         .execute(connection);
 
@@ -119,18 +122,17 @@ pub async fn check_password(json: web::Json<NewUser>) -> web::Json<PasswordMatch
     }
 }
 
-#[get("/getBalance")]
-pub async fn get_balance(json: web::Json<Email>) -> Result<web::Json<Balance>> {
-    println!("Checking if password matchers");
+#[post("/getBalance")]
+pub async fn get_balance(json: web::Json<Email>) -> web::Json<Balance> {
     let connection = &mut establish_connection();
     let user_email = &json.email;
-    let mut balance: f64 = 0.0;
+    let mut user_balance: f64 = 0.0;
 
     use backend::schema::users::dsl::*;
 
     let results = users
-        .select(User::as_select())
         .filter(email.eq(&user_email))
+        .select(User::as_select())
         .load(connection)
         .expect("Error loading users");
 
@@ -150,8 +152,16 @@ pub async fn get_balance(json: web::Json<Email>) -> Result<web::Json<Balance>> {
         
         let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
         let web3_conn = establish_web3_connection(&endpoint).await;
-        balance = wallet_instance.get_eth_balance(&web3_conn).await.unwrap();
+        let eth_balance_result = wallet_instance.get_eth_balance(&web3_conn).await;
+        match eth_balance_result {
+            Ok(eth_balance) => {
+                user_balance = eth_balance;
+            },
+            Err(e) => {
+                println!("Error getting balance: {}", e);
+            }
+        }
     }
     
-    Ok(web::Json(Balance { balance }))
+    web::Json(Balance { balance: user_balance })
 }

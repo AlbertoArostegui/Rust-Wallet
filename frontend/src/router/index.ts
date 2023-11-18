@@ -38,8 +38,8 @@ const router = createRouter({
       component: LogoutView
     },
     {
-      path: '/my-page',
-      name: 'my-page',
+      path: '/mypage',
+      name: 'mypage',
       component: MypageView
     }
   ]

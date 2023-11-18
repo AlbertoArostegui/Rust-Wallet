@@ -40,17 +40,15 @@ async fn main() -> std::io::Result<()> {
         println!("{}", user.email);
     }
 
-    
+    */
     let (secret_key, public_key) = walgen::generate_keypair();
     let public_address = walgen::public_key_address(&public_key);
     println!("Secret key: {}", secret_key.display_secret());
     println!("Public key: {}", public_key.to_string());
     println!("Public address: {}", &public_address);
-    */
     
-    //let wallet_instance = walgen::Wallet::new(&secret_key, &public_key);
-    //wallet_instance.save_to_file("crypto_wallet.json");
-    /*let wallet_instance = walgen::Wallet::from_file("crypto_wallet.json").unwrap();
+    
+    let wallet_instance = walgen::Wallet::new(&secret_key, &public_key);
     println!("Public key: {}", wallet_instance.public_address.to_string());
 
     let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
@@ -61,7 +59,9 @@ async fn main() -> std::io::Result<()> {
 
     let balance = wallet_instance.get_eth_balance(&web3_conn).await.unwrap();
     println!("Balance: {balance}");
-     */
+
+    
+     
     
 
     HttpServer::new(|| {
@@ -71,6 +71,7 @@ async fn main() -> std::io::Result<()> {
             .service(web_methods::check_email_exists)
             .service(web_methods::create_new_user)
             .service(web_methods::check_password)
+            .service(web_methods::get_balance)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })

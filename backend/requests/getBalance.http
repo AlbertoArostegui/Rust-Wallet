@@ -1,0 +1,8 @@
+POST http://localhost/api/getBalance
+Host: localhost
+Content-Type: application/json
+Content-Length: 
+
+{ 
+    "email": "ae@aeae.ae"
+} 

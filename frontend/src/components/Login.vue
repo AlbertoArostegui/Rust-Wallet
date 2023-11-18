@@ -14,10 +14,11 @@
             const response = await this.checkPassword();
             console.log(response);
             if (response.password_matches) {
-                this.password_error = 'Email or password are incorrect';
-            } else {
                 this.$store.dispatch('login', this.email)
                 this.$router.push('/');
+            } else {
+                console.log('Email or password were incorrect')
+                this.password_error = 'Email or password are incorrect';
             } 
         },
 
@@ -55,7 +56,9 @@
     </div>
     <div id="register-button">
       <button type="submit" class="btn btn-primary">Log in</button>
+      <p v-if="password_error" class="error-text">{{ password_error }}</p>
     </div>
+    
     
   </form>
 </template>

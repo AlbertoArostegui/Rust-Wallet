@@ -1,25 +1,46 @@
-<script setup lang="ts">
-    import { useStore } from 'vuex'
-    const store = useStore()
-    const user_email = store.state.user;
-    const response = await fetch('/api/getBalance', {
-        method: 'GET',
+<script lang="ts">
+export default {
+  data () {
+    return {
+      balance: ''
+    }
+  }, 
+  methods: {
+    async showBalance() {
+      console.log('showBalance() triggered in Mypage.vue');
+      const balance = await this.getBalance();
+      this.balance = balance;
+    },
+    async getBalance() {
+      console.log('getBalance() triggered in Mypage.vue');
+      const response = await fetch('/api/getBalance', {
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
+          'Content-Length':  '',
         },
         body: JSON.stringify({
-            email: user_email
+          email: this.$store.state.user,
         }),
-    });
-    const response_json = await response.json();
-    const balance = response_json.balance;
-
+      });
+      const response_json = await response.json();
+      return response_json.balance;
+    },
+  },
+  async created() {
+    console.log('Mypage was created!');
+    await this.showBalance();
+    console.log('Mypage finished creating!')
+  }
+}
 </script>
 <template>
 <body>
     <div id="balance">
         <h1>Balance</h1>
-        <h2>{{ balance }}</h2>
+        <button @click="showBalance"></button>
+        <h2>balance {{ balance }}</h2>
+        <h2 v-if="balance">v-if balance</h2>
     </div>
 </body>
 </template>

@@ -94,8 +94,11 @@ impl Wallet {
 
     pub async fn get_eth_balance(&self, web3_conn: &Web3<WebSocket>) -> Result<f64> {
         let wallet_address = Address::from_str(&self.public_address)?;
+        dbg!(&wallet_address);
         let balance = web3_conn.eth().balance(wallet_address, None).await?;
+        dbg!(balance);
         let eth_balance = balance.as_u128() as f64;
+        dbg!(eth_balance);
 
         Ok(eth_balance / 1_000_000_000_000_000_000.0)
     }
