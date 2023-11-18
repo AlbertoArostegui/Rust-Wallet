@@ -2,7 +2,7 @@
 export default {
   data () {
     return {
-      balance: ''
+      balance: '0.0'
     }
   }, 
   methods: {
@@ -40,6 +40,7 @@ export default {
         <h1>Balance</h1>
         <p>?????</p>
         <p>??2</p>
+        <h2>{{ balance }}</h2>
     </div>
 </body>
 </template>
