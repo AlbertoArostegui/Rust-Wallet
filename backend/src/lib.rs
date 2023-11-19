@@ -1,3 +1,4 @@
+use vaultrs::client::{Client, VaultClient, VaultClientSettingsBuilder};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenv::dotenv;
@@ -13,4 +14,16 @@ pub fn establish_connection() -> PgConnection {
     
     PgConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
+}
+
+pub fn establish_vault_connection() -> VaultClient {
+    let client = VaultClient::new(
+        VaultClientSettingsBuilder::default()
+            .address("https://vault:8200")
+            .token("token")
+            .build()
+            .unwrap()
+    ).unwrap();
+
+    client
 }

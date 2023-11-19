@@ -29,8 +29,9 @@ struct NewUser {
 //Response
 
 #[derive(Serialize)]
-struct Balance {
+struct Portfolio {
     balance: f64,
+    address: String,
 }
 #[derive(Serialize)]
 struct EmailExists {
@@ -123,10 +124,11 @@ pub async fn check_password(json: web::Json<NewUser>) -> web::Json<PasswordMatch
 }
 
 #[post("/getBalance")]
-pub async fn get_balance(json: web::Json<Email>) -> web::Json<Balance> {
+pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
     let connection = &mut establish_connection();
     let user_email = &json.email;
     let mut user_balance: f64 = 0.0;
+    let mut user_address = "Wallet address";
 
     use backend::schema::users::dsl::*;
 
@@ -134,13 +136,13 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Balance> {
         .filter(email.eq(&user_email))
         .select(User::as_select())
         .load(connection)
-        .expect("Error loading users");
+        .expect("Error loading users, db problem");
 
     if results.len() == 0 {
         println!("Couldnt find user");
     } else {
         let user = &results[0];
-        let user_address = &user.address;
+        user_address = &user.address;
         let user_public_key = &user.public_key;
         let user_secret_key = &user.private_key;
     
@@ -163,5 +165,6 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Balance> {
         }
     }
     
-    web::Json(Balance { balance: user_balance })
+    web::Json(Portfolio { balance: user_balance
+    , address: user_address.to_string() })
 }

@@ -2,14 +2,16 @@
 export default {
   data () {
     return {
-      balance: '0.0'
+      balance: '0.0',
+      address: 'nada'
     }
   }, 
   methods: {
     async showBalance() {
       console.log('showBalance() triggered in Mypage.vue');
-      const balance = await this.getBalance();
-      this.balance = balance;
+      const response_json = await this.getBalance();
+      this.balance = response_json.balance;
+      this.address = response_json.address;
     },
     async getBalance() {
       console.log('getBalance() triggered in Mypage.vue');
@@ -24,7 +26,7 @@ export default {
         }),
       });
       const response_json = await response.json();
-      return response_json.balance;
+      return response_json;
     },
   },
   async created() {
@@ -36,12 +38,12 @@ export default {
 </script>
 <template>
 <body>
-    <div id="balance">
-        <h1>Balance</h1>
-        <p>?????</p>
-        <p>??2</p>
-        <h2>{{ balance }}</h2>
-        <p>balance no tira</p>
+    <div id="title">
+      <h1>Portfolio</h1>  
+    </div><br>
+    <div id="portfolio">
+      <h2>{{ balance }} Ethereum on {{ address }}</h2>
+      <h3>Grafico</h3>
     </div>
 </body>
 </template>
@@ -49,7 +51,6 @@ export default {
 <style scoped>
     body {
         color: rgb(200, 192, 147);
-        display: flex;
         align-self: center;
     }
 
@@ -65,8 +66,14 @@ export default {
         width: 50vw;
     }
 
-    #balance {
+    #title {
         padding-top: 3rem;
         padding-left: 3rem;
+    }
+
+    #portfolio {
+        background-color: darkslateblue;
+        padding-left: 3rem;
+        border-radius: 12px;
     }
 </style>

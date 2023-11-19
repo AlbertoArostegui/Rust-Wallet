@@ -3,7 +3,7 @@ version: '3'
 
 services:
   frontend:
-    image: albertoarostegui/frontend
+    image: albertoarostegui/frontend:prueba3
 
   database:
     image: albertoarostegui/db-postgres

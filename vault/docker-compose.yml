@@ -1,0 +1,10 @@
+services:
+  vault:
+    image: albertoarostegui/secret-vault
+    ports:
+      - 8200:8200
+    volumes:
+      - ./secrets:/vault/file
+    cap_add:
+      - IPC_LOCK
+    
