@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: db-deployment
   labels:
-    app: api
+    app: database
     role: leader
     tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: database
   template:
     metadata:
       labels:
-        app: api
+        app: database
         role: leader
         tier: backend
     spec:
@@ -31,4 +31,4 @@ spec:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 8080
+        - containerPort: 5432

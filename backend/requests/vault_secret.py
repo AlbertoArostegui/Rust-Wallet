@@ -2,11 +2,11 @@ import hvac
 
 client = hvac.Client(
     url='http://127.0.0.1:8200',
-    token='s.s01qExUUMJYOOk2z362x07ad',
+    token='s.8L3iswOyDVoSCWpiXrGLXcWx',
 )
 
-create_response = client.secrets.kv.v2.create_or_update_secret(
-    path='api/peli',
-    secret=dict(contra='contra123'),
-)
+read_response = client.secrets.kv.read_secret_version(path='api/peli')
 
+password = read_response['data']['data']['contra']
+
+print(password)

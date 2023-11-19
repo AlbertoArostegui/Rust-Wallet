@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: frontend-deployment
   labels:
-    app: api
+    app: vue
     role: leader
-    tier: backend
+    tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: vue
   template:
     metadata:
       labels:
-        app: api
+        app: vue
         role: leader
-        tier: backend
+        tier: frontend
     spec:
       containers:
-      - name: leader
+      - name: frontend
         image: "albertoarostegui/frontend"
         resources:
           requests:

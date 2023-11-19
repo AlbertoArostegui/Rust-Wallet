@@ -4,7 +4,8 @@ services:
     ports:
       - 8200:8200
     volumes:
-      - ./secrets:/vault/file:rw
+      - ./data:/vault/file
+        ./vault:/vault/config
     cap_add:
       - IPC_LOCK
     
