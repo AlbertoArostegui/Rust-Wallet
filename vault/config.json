@@ -12,6 +12,5 @@
         }
     }],
     "ui": true,
-    "disable_sealwrap": true,
     "disable_mlock": true
 }

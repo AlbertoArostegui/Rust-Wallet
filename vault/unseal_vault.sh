@@ -1,21 +1,32 @@
 #!/bin/sh
 
-touch 1
 vault server -config /vault/config/config.json > /dev/null 2>&1 &
-touch 2
+
+VAULT_PID=$!
 
 while ! nc -z localhost 8200; do   
   sleep 0.1
 done
-touch 3
+
 
 vault operator init -key-shares=1 -key-threshold=1 > /vault/config/keys.txt 2>&1
 if [ $? -ne 0 ]; then
-  echo "Failed to initialize Vault"
-  cat /vault/config/keys.txt
-  exit 1
+    echo "Failed to initialize Vault"
+    cat /vault/config/keys.txt
+    exit 1
 fi
 
+
 UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/config/keys.txt | awk '{print $NF}')
+ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/config/keys.txt | awk '{print $NF}')
 
 vault operator unseal $UNSEAL_KEY
+
+vault login $ROOT_TOKEN
+
+vault secrets enable -path=secret kv-v2
+
+vault policy write api /vault/config/api.hcl
+vault token create -policy=api -format=json | jq -r '.auth.client_token' > /vault/config/api_token.txt
+
+wait $VAULT_PID
