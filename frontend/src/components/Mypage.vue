@@ -43,7 +43,7 @@ export default {
     </div><br>
     <div id="portfolio">
       <h2>{{ balance }} Ethereum on {{ address }}</h2>
-      <h3>Grafico</h3>
+      <h3>Grafico de eth</h3>
     </div>
 </body>
 </template>
