@@ -72,6 +72,7 @@ async fn main() -> std::io::Result<()> {
             .service(web_methods::create_new_user)
             .service(web_methods::check_password)
             .service(web_methods::get_balance)
+            .service(web_methods::sign_and_send)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })

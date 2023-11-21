@@ -1,12 +1,15 @@
 use std::env;
+use std::str::FromStr;
 
-use actix_web::{get, post, web, HttpResponse, Responder, Result};
+use actix_web::{post, web, HttpResponse, Responder};
 use backend::models::*;
 use backend::establish_connection;
 use diesel::insert_into;
 use diesel::prelude::*;
 use serde_derive::Serialize;
 use serde::Deserialize;
+use web3::types::Address;
+use secp256k1::SecretKey;
 
 use crate::utils;
 use crate::walgen;
@@ -24,6 +27,12 @@ struct NewUser {
     name: String,
     email: String,
     password: String,
+}
+#[derive(Deserialize)]
+struct Transaction {
+    email: String,
+    to: String,
+    amount: f64,
 }
 
 //Response
@@ -170,11 +179,47 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
 }
 
 #[post("/sendTransaction")]
-pub fn sign_and_send(json: web::Json<Email>) -> impl Responder {
+pub async fn sign_and_send(json: web::Json<Transaction>) -> impl Responder {
 
-    let conn = establish_connection();
+    let connection = &mut establish_connection();
     let user_email = &json.email;
+    let to_address = &json.to;
+    let amount = &json.amount;
+    
+    use backend::schema::users::dsl::*;
 
+    let results = users
+        .filter(email.eq(&user_email))
+        .select(User::as_select())
+        .load(connection)
+        .expect("Error loading users, db problem");
 
-    HttpResponse::Ok().body("Generated new user")
+    if results.len() == 0 {
+        println!("Couldnt find user");
+    } else {
+        let user = &results[0];
+        let user_secret_key: &str = &user.private_key;
+        
+        let user_secret_key = SecretKey::from_str(user_secret_key).unwrap();
+        
+        let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
+        let web3_conn = establish_web3_connection(&endpoint).await;
+        let params = walgen::create_eth_transaction(
+            Address::from_str(&to_address).unwrap(),
+            *amount,
+        );
+        let signed_tx = walgen::sign_and_send(&web3_conn, params, &user_secret_key).await;
+        match signed_tx {
+            Ok(tx_hash) => {
+                println!("Transaction sent: {:?}", tx_hash);
+                return HttpResponse::Ok().body("Transaction sent!");
+            },
+            Err(e) => {
+                println!("Error sending transaction: {}", e);
+                return HttpResponse::Ok().body("Could not send transaction");
+            }
+        }
+    }
+
+    HttpResponse::Ok().body("Could not find user")
 }

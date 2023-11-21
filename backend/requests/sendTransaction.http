@@ -1,0 +1,11 @@
+POST http://localhost/api/sendTransaction
+Host: localhost
+Content-Type: application/json
+Content-Length: 
+
+{ 
+    "email": "ae@aeae.ae",
+    "to": "0xd0aee3cc293819dd7584123e75d70d829e732b07",
+    "amount": 0.1
+}
+
