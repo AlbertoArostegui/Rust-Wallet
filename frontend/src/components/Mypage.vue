@@ -1,9 +1,13 @@
 <script lang="ts">
+
 export default {
+  components: {
+    IconUpdate: () => import('./icons/IconUpdate.vue'),
+  },
   data () {
     return {
       balance: '0.0',
-      address: 'nada'
+      address: 'loading...'
     }
   }, 
   methods: {
@@ -30,20 +34,23 @@ export default {
     },
   },
   async created() {
-    console.log('Mypage was created!!!!');
+    
     await this.showBalance();
-    console.log('Mypage finished creating! la pelicula es considerable')
+    
   }
 }
 </script>
 <template>
 <body>
     <div id="title">
-      <h1>Portfolio</h1>  
+      <h1>Portfolio</h1>
+      <h2><a @click="showBalance">Actualizar</a></h2>
     </div><br>
     <div id="portfolio">
       <h2>{{ balance }} Ethereum on {{ address }}</h2>
-      <h3>Grafico de eth</h3>
+    </div>
+    <div id="transaction-zone">
+      <input type="text">
     </div>
 </body>
 </template>
@@ -52,6 +59,10 @@ export default {
     body {
         color: rgb(200, 192, 147);
         align-self: center;
+    }
+
+    a {
+        text-decoration: none;
     }
 
     .texto {
