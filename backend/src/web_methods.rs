@@ -168,3 +168,13 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
     web::Json(Portfolio { balance: user_balance
     , address: user_address.to_string() })
 }
+
+#[post("/sendTransaction")]
+pub fn sign_and_send(json: web::Json<Email>) -> impl Responder {
+
+    let conn = establish_connection();
+    let user_email = &json.email;
+
+
+    HttpResponse::Ok().body("Generated new user")
+}
