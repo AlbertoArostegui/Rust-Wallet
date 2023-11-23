@@ -1,12 +1,12 @@
 #!/bin/sh
-KEYS=/vault/config/keys.txt
+KEYS=/vault/file/keys.txt
 if [ -f "$KEYS" ]; then
 
     echo "if"
     sleep 1
     vault server -config /vault/config/config.json > /dev/null 2>&1 &
     VAULT_PID=$!
-    UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/config/keys.txt | awk '{print $NF}')
+    UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/file/keys.txt | awk '{print $NF}')
     vault operator unseal $UNSEAL_KEY
     wait $VAULT_PID
 
@@ -21,16 +21,16 @@ else
     done
 
 
-    vault operator init -key-shares=1 -key-threshold=1 > /vault/config/keys.txt 2>&1
+    vault operator init -key-shares=1 -key-threshold=1 > /vault/file/keys.txt 2>&1
     if [ $? -ne 0 ]; then
         echo "Failed to initialize Vault"
-        cat /vault/config/keys.txt
+        cat /vault/file/keys.txt
         exit 1
     fi
 
 
-    UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/config/keys.txt | awk '{print $NF}')
-    ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/config/keys.txt | awk '{print $NF}')
+    UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/file/keys.txt | awk '{print $NF}')
+    ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/file/keys.txt | awk '{print $NF}')
 
     vault operator unseal $UNSEAL_KEY
 
