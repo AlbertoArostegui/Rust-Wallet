@@ -188,7 +188,6 @@ pub async fn get_balance(json: web::Json<Email>, data: web::Data<AppState>) -> w
 #[post("/sendTransaction")]
 pub async fn sign_and_send(json: web::Json<Transaction>, data: web::Data<AppState>) -> impl Responder {
 
-    let connection = &mut establish_connection();
     let user_email = &json.email;
     let to_address = &json.to;
     let amount = &json.amount;
@@ -208,7 +207,7 @@ pub async fn sign_and_send(json: web::Json<Transaction>, data: web::Data<AppStat
     match signed_tx {
         Ok(tx_hash) => {
             println!("Transaction sent: {:?}", tx_hash);
-            return HttpResponse::Ok().body("Transaction sent!");
+            return HttpResponse::Ok().body(tx_hash.to_string());
         },
         Err(e) => {
             println!("Error sending transaction: {}", e);
