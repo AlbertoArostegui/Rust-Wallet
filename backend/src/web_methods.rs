@@ -90,7 +90,7 @@ pub async fn create_new_user(json: web::Json<NewUser>, data: web::Data<AppState>
     let new_public_address = format!("{:?}", new_public_address);
 
     let private_address_str = new_secret_key.display_secret().to_string();
-
+    println!("Private key: {}", private_address_str);
     insert_into_vault(&root_key, &new_email, &private_address_str).await;
 
     let _ = insert_into(users)
@@ -195,7 +195,7 @@ pub async fn sign_and_send(json: web::Json<Transaction>, data: web::Data<AppStat
     let root_key = &data.root_key;
     
     let user_secret_key = retrieve_from_vault(root_key, &user_email).await;
-    
+    println!("Secret key from vault: {}", user_secret_key);
     let user_secret_key = SecretKey::from_str(&user_secret_key).unwrap();
     
     let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();

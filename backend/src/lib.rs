@@ -23,9 +23,9 @@ pub async fn insert_into_vault(token: &str, key: &str, val: &str) {
     let url = format! ("http://secret-vault:8200/v1/secret/api/secretkeys/{}", key);
     
     let data = json!({
-        "data": {
+        
             "privatekey": val
-        }
+        
     });
     let client = reqwest::Client::new();
     let res = client.put(url)
