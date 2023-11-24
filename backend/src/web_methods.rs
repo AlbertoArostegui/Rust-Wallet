@@ -4,6 +4,9 @@ use std::str::FromStr;
 use actix_web::{post, web, HttpResponse, Responder};
 use backend::models::*;
 use backend::establish_connection;
+use backend::insert_into_vault;
+use backend::retrieve_from_vault;
+use backend::AppState;
 use diesel::insert_into;
 use diesel::prelude::*;
 use serde_derive::Serialize;
@@ -72,11 +75,12 @@ pub async fn check_email_exists(json: web::Json<Email>) -> web::Json<EmailExists
 
 
 #[post("/createNewUser")]
-pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
+pub async fn create_new_user(json: web::Json<NewUser>, data: web::Data<AppState>) -> impl Responder {
     let connection = &mut establish_connection();
     let new_name = &json.name;
     let new_email = &json.email;
     let new_password = &json.password;
+    let root_key = &data.root_key;
 
     use backend::schema::users::dsl::*;
 
@@ -85,7 +89,9 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
     let new_public_address = walgen::public_key_address(&new_public_key);
     let new_public_address = format!("{:?}", new_public_address);
 
+    let private_address_str = new_secret_key.display_secret().to_string();
 
+    insert_into_vault(&root_key, &new_email, &private_address_str).await;
 
     let _ = insert_into(users)
         .values((
@@ -93,7 +99,6 @@ pub async fn create_new_user(json: web::Json<NewUser>) -> impl Responder {
             email.eq(new_email),
             hashed_password.eq(new_hashed_password),
             salt.eq(new_salt),
-            private_key.eq(new_secret_key.display_secret().to_string()),
             public_key.eq(new_public_key.to_string()),
             address.eq(new_public_address),
         ))
@@ -133,11 +138,14 @@ pub async fn check_password(json: web::Json<NewUser>) -> web::Json<PasswordMatch
 }
 
 #[post("/getBalance")]
-pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
+pub async fn get_balance(json: web::Json<Email>, data: web::Data<AppState>) -> web::Json<Portfolio> {
     let connection = &mut establish_connection();
     let user_email = &json.email;
     let mut user_balance: f64 = 0.0;
     let mut user_address = "Wallet address";
+
+    let root_key = &data.root_key;
+    let user_secret_key = retrieve_from_vault(root_key, &user_email).await;
 
     use backend::schema::users::dsl::*;
 
@@ -153,7 +161,6 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
         let user = &results[0];
         user_address = &user.address;
         let user_public_key = &user.public_key;
-        let user_secret_key = &user.private_key;
     
         let wallet_instance: Wallet = Wallet::from_params(
             &user_secret_key,
@@ -179,47 +186,33 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
 }
 
 #[post("/sendTransaction")]
-pub async fn sign_and_send(json: web::Json<Transaction>) -> impl Responder {
+pub async fn sign_and_send(json: web::Json<Transaction>, data: web::Data<AppState>) -> impl Responder {
 
     let connection = &mut establish_connection();
     let user_email = &json.email;
     let to_address = &json.to;
     let amount = &json.amount;
+    let root_key = &data.root_key;
     
-    use backend::schema::users::dsl::*;
-
-    let results = users
-        .filter(email.eq(&user_email))
-        .select(User::as_select())
-        .load(connection)
-        .expect("Error loading users, db problem");
-
-    if results.len() == 0 {
-        println!("Couldnt find user");
-    } else {
-        let user = &results[0];
-        let user_secret_key: &str = &user.private_key;
-        
-        let user_secret_key = SecretKey::from_str(user_secret_key).unwrap();
-        
-        let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
-        let web3_conn = establish_web3_connection(&endpoint).await;
-        let params = walgen::create_eth_transaction(
-            Address::from_str(&to_address).unwrap(),
-            *amount,
-        );
-        let signed_tx = walgen::sign_and_send(&web3_conn, params, &user_secret_key).await;
-        match signed_tx {
-            Ok(tx_hash) => {
-                println!("Transaction sent: {:?}", tx_hash);
-                return HttpResponse::Ok().body("Transaction sent!");
-            },
-            Err(e) => {
-                println!("Error sending transaction: {}", e);
-                return HttpResponse::Ok().body("Could not send transaction");
-            }
+    let user_secret_key = retrieve_from_vault(root_key, &user_email).await;
+    
+    let user_secret_key = SecretKey::from_str(&user_secret_key).unwrap();
+    
+    let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
+    let web3_conn = establish_web3_connection(&endpoint).await;
+    let params = walgen::create_eth_transaction(
+        Address::from_str(&to_address).unwrap(),
+        *amount,
+    );
+    let signed_tx = walgen::sign_and_send(&web3_conn, params, &user_secret_key).await;
+    match signed_tx {
+        Ok(tx_hash) => {
+            println!("Transaction sent: {:?}", tx_hash);
+            return HttpResponse::Ok().body("Transaction sent!");
+        },
+        Err(e) => {
+            println!("Error sending transaction: {}", e);
+            return HttpResponse::Ok().body("Could not send transaction");
         }
     }
-
-    HttpResponse::Ok().body("Could not find user")
 }

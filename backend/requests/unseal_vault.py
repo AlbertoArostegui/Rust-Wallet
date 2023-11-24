@@ -1,7 +1,7 @@
 import requests
 
 VAULT_ADDR = 'http://127.0.0.1:8200'  # Replace with your Vault server address
-UNSEAL_KEYS = ['LM4CIuLThelmpflk+cz6lJCCvXcvNGMc1hdryrkylUA=']  # Replace with your actual unseal keys
+UNSEAL_KEYS = ['A8HEWdEmMUaA6c5Ytf7cqo4sENYW54cfCHhCj0fY1Gc=']  # Replace with your actual unseal keys
 
 def unseal_vault():
     for key in UNSEAL_KEYS:
