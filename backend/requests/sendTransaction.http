@@ -1,11 +1,11 @@
-POST http://localhost/api/sendTransaction
+POST http://127.0.0.1/api/sendTransaction
 Host: localhost
 Content-Type: application/json
 Content-Length: 
 
 {  
-    "email": "prueba@docker.io",
-    "to": "0xd0aee3cc293819dd7584123e75d70d829e732b07",
-    "amount": 0.1
+    "email": "marquitos@marquitos.marquitos",
+    "to": "0xD1D6ADE2edFe459266671d78caE3CA99fd6861e8",
+    "amount": 0.05
 }
 

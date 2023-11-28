@@ -12,8 +12,6 @@ diesel::table! {
         #[max_length = 255]
         salt -> Varchar,
         #[max_length = 255]
-        private_key -> Varchar,
-        #[max_length = 255]
         public_key -> Varchar,
         #[max_length = 255]
         address -> Varchar,

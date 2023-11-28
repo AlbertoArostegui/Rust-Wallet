@@ -2,16 +2,16 @@
 KEYS=/vault/file/keys.txt
 if [ -f "$KEYS" ]; then
 
-    echo "if"
-    sleep 1
     vault server -config /vault/config/config.json > /dev/null 2>&1 &
+
     VAULT_PID=$!
-    UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/file/keys.txt | awk '{print $NF}')
-    vault operator unseal $UNSEAL_KEY
+
+    echo "Vault is already initialized"
+
     wait $VAULT_PID
 
 else
-    echo "else"
+    echo "initializing Vault"
     vault server -config /vault/config/config.json > /dev/null 2>&1 &
 
     VAULT_PID=$!
@@ -36,7 +36,7 @@ else
 
     vault login $ROOT_TOKEN
 
-    vault secrets enable -path=secret kv-v2
+    vault secrets enable -path=secret kv-v1
 
     vault policy write api /vault/config/api.hcl
     vault token create -policy=api -format=json | jq -r '.auth.client_token' > /vault/config/api_token.txt

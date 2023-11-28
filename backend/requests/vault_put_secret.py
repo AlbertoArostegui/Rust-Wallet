@@ -1,14 +1,20 @@
-import hvac
+import requests
 
-client = hvac.Client(
-    url='http://127.0.0.1:8200',
-    token='s.FuZ34f8MMqA35Hi0I4nLmFHr',
-)
+url = 'http://127.0.0.1:8200/v1/secret/api/secretkeys/' + 'email26@gmail.com'
+headers = {
+    'X-Vault-Token': 's.JSEhbAvtxbPXF7da7iAFCSnf',
+    'Content-Type': 'application/json'
+}
+data = {
+        'privatekey': 'privarftek3432'
+}
 
 
-create_response = client.secrets.kv.v2.create_or_update_secret(
-    path='api/peli',
-    secret=dict(contra='contra123'),
-)
+response = requests.post(url, headers=headers, json=data)
+create_response = response.json()
 
-print('Secret written successfully.')
+if response.status_code == 200:
+    print('Secret written successfully.')
+else:
+    print('Failed to write secret:', create_response['errors'])
+

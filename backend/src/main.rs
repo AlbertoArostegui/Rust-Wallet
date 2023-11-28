@@ -1,15 +1,13 @@
-use actix_web::middleware::DefaultHeaders;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use actix_cors::Cors;
-use backend::models::*;
-use backend::establish_connection;
-use diesel::prelude::*;
-use std::env;
+use backend::read_root_key_and_unseal;
+use backend::AppState;
 use std::{thread, time};
 
 mod utils;
 mod walgen;
 mod web_methods;
+
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -40,7 +38,7 @@ async fn main() -> std::io::Result<()> {
         println!("{}", user.email);
     }
 
-    */
+    
     let (secret_key, public_key) = walgen::generate_keypair();
     let public_address = walgen::public_key_address(&public_key);
     println!("Secret key: {}", secret_key.display_secret());
@@ -60,11 +58,13 @@ async fn main() -> std::io::Result<()> {
     let balance = wallet_instance.get_eth_balance(&web3_conn).await.unwrap();
     println!("Balance: {balance}");
 
-    
+    */
      
-    
+    let root_key: String = read_root_key_and_unseal().await; 
+    let shared_state = web::Data::new(AppState { root_key: root_key.clone() });
+    println!("Root key: {}", root_key);
 
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         let cors = Cors::permissive();
         App::new()
             .wrap(cors)
@@ -73,6 +73,7 @@ async fn main() -> std::io::Result<()> {
             .service(web_methods::check_password)
             .service(web_methods::get_balance)
             .service(web_methods::sign_and_send)
+            .app_data(shared_state.clone())
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })

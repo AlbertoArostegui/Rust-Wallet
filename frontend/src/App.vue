@@ -13,12 +13,14 @@ console.log(is_logged_in);
       <header>
         <nav class="navbar">
           <div class="navbar-left">
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/about">About</RouterLink>
-            <RouterLink to="/charts">Charts</RouterLink>
-          </div>
-          <div v-if="is_logged_in" class="navbar-left">
-            <RouterLink to="/mypage">My Page</RouterLink>
+            <div>
+              <RouterLink to="/">Home</RouterLink>
+              <RouterLink to="/about">About</RouterLink>
+              <RouterLink to="/charts">Charts</RouterLink>
+            </div>
+            <div v-if="is_logged_in">
+              <RouterLink to="/mypage">My Page</RouterLink>
+            </div>
           </div>
 
           <div v-if="is_logged_in" class="navbar-right">
@@ -62,7 +64,6 @@ nav a {
   font-size: 18px;
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
 }
 
 nav a:first-of-type {

@@ -12,7 +12,7 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
       #Recalcar que al no ser un volumen nombrado, si se hiciese docker-compose down -v, sería borrado
       #El volumen existe mientras la carpeta no se borre, si la carpeta se borra y se haced un prune, la informacion se pierde
       #Si la carpeta se borra pero no se hace prune, la informacion sigue en pie
@@ -21,9 +21,11 @@ services:
       - 5432:5432
     
   backend:
-    image: albertoarostegui/backend
+    image: albertoarostegui/backend:prueba
     depends_on:
       - database
+    volumes:
+      - vault:/vault
     environment:
       DATABASE_URL: postgres://postgres:postgres@database/users
     
@@ -37,3 +39,16 @@ services:
     depends_on:
       - frontend
       - backend
+
+  secret-vault:
+    image: albertoarostegui/secret-vault
+    ports:
+      - 8200:8200
+    volumes:
+      - vault:/vault/file
+    cap_add:
+      - IPC_LOCK
+
+volumes:
+  vault:
+  db:

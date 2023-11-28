@@ -9,7 +9,6 @@ pub struct User {
     pub email: String,
     pub hashed_password: String,
     pub salt: String,
-    pub private_key: String,
     pub public_key: String,
     pub address: String,
 }
