@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-db
+  labels:
+    app: cluster-ip-db
+
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 5432
+      protocol: TCP
+      name: http
+  selector:
+    app: database
+    role: leader
+    tier: backend

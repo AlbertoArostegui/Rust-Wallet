@@ -4,7 +4,7 @@ Content-Type: application/json
 Content-Length: 
 
 {  
-    "email": "ae@aeae.ae",
+    "email": "prueba@docker.io",
     "to": "0xd0aee3cc293819dd7584123e75d70d829e732b07",
     "amount": 0.1
 }

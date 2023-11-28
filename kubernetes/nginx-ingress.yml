@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-app
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: cluster-ip-frontend
+            port:
+              number: 80
+      - path: /api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: cluster-ip-api
+            port: 
+              number: 80

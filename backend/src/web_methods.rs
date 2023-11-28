@@ -161,6 +161,7 @@ pub async fn get_balance(json: web::Json<Email>) -> web::Json<Portfolio> {
             &user_address,
         ).unwrap();
         
+        dotenv::dotenv().ok();
         let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
         let web3_conn = establish_web3_connection(&endpoint).await;
         let eth_balance_result = wallet_instance.get_eth_balance(&web3_conn).await;
@@ -202,6 +203,7 @@ pub async fn sign_and_send(json: web::Json<Transaction>) -> impl Responder {
         
         let user_secret_key = SecretKey::from_str(user_secret_key).unwrap();
         
+        dotenv::dotenv().ok();
         let endpoint = env::var("INFURA_RINKEBY_WS").unwrap();
         let web3_conn = establish_web3_connection(&endpoint).await;
         let params = walgen::create_eth_transaction(
