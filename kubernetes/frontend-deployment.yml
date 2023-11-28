@@ -21,9 +21,5 @@ spec:
       containers:
       - name: frontend
         image: "albertoarostegui/frontend"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
         ports:
         - containerPort: 80
