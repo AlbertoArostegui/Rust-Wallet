@@ -1,4 +1,4 @@
-POST http://localhost/api/checkEmailExists
+POST http://34.201.98.102/api/checkEmailExists
 Host: localhost
 Content-Type: application/json
 Content-Length:  

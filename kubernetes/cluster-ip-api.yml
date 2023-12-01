@@ -14,5 +14,4 @@ spec:
       name: http
   selector:
     app: api
-    role: leader
     tier: backend
