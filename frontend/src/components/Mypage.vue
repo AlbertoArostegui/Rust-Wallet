@@ -10,7 +10,8 @@ export default {
       address: 'loading...',
       hash_error: '',
       address_to: '',
-      amount: ''
+      amount: '',
+      tx_info: ''
     }
   }, 
   methods: {
@@ -54,8 +55,10 @@ export default {
           amount: parsed_amout
         }),
       });
-      const response_json = await response.json();
-      return response_json;
+      console.log(response);
+      console.log('response.body: ' + response.body);
+      const response_body = response.body;
+      this.tx_info = 'Transaction sent, you can check its status on Etherscan: https://sepolia.etherscan.io/tx/' + response_body;
     }
   },
   async created() {
@@ -80,6 +83,7 @@ export default {
           <label for="address_to" class="form-label">Address to send it to</label>
           <input type="text" id="address_to" class="form-input" v-model="address_to"/>
           <p v-if="hash_error" class="error-text">{{ hash_error }}</p>
+          <p v-if="tx_info">{{ tx_info }}</p>
         </div>
         <div class="form-group">
           <label for="amount" class="form-label">Amount in ETH to send (Fees not included)</label>
