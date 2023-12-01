@@ -21,7 +21,7 @@ services:
       - 5432:5432
     
   backend:
-    image: albertoarostegui/backend:prueba
+    image: albertoarostegui/backend
     depends_on:
       - database
     volumes:

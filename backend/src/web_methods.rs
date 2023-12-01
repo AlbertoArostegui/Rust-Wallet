@@ -208,7 +208,7 @@ pub async fn sign_and_send(json: web::Json<Transaction>, data: web::Data<AppStat
     match signed_tx {
         Ok(tx_hash) => {
             println!("Transaction sent: {:?}", tx_hash);
-            return HttpResponse::Ok().body(tx_hash.to_string());
+            return HttpResponse::Ok().body(format!("{:?}", tx_hash));
         },
         Err(e) => {
             println!("Error sending transaction: {}", e);
