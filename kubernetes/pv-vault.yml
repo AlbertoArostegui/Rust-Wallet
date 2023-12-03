@@ -7,3 +7,5 @@ spec:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
+  hostPath:
+    path: "C:/Users/alberto/kubernetes"

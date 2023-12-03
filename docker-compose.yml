@@ -27,7 +27,6 @@ services:
     
   nginx:
     image: albertoarostegui/nginx
-    build: ./nginx
     ports:
       - 80:80
     volumes:

@@ -4,10 +4,7 @@
 Repositorio donde se actualizará el código para la entrega individual de Administración de Sistemas 2023
 
 El funcionamiento de la aplicacion es sencillo, simplemente ejecutando
-
-```docker compose up```
-
-y asegurándonos de que la máquina en la que se ejecuta permite el tráfico HTTP tendremos nuestra aplicación levantada.
+```docker compose up``` y asegurándonos de que la máquina en la que se ejecuta permite el tráfico HTTP tendremos nuestra aplicación levantada.
 
 Si accedemos a la dirección IP de la máquina, tendremos una pantalla de inicio (placeholder, ya que no va de diseño web el trabajo). En el navbar podremos crearnos una cuenta, lo que registrará nuestro usuario en la base de datos y creará unas claves pública y privada para un monedero de ETH que se va a conectar a la testnet de Sepolia, guardando la clave privada en un contenedor de Hashicorp/vault.
 

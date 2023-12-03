@@ -16,7 +16,6 @@ console.log(is_logged_in);
             <div>
               <RouterLink to="/">Home</RouterLink>
               <RouterLink to="/about">About</RouterLink>
-              <RouterLink to="/charts">Charts</RouterLink>
             </div>
             <div v-if="is_logged_in">
               <RouterLink to="/mypage">My Page</RouterLink>
