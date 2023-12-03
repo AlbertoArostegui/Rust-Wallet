@@ -14,6 +14,10 @@ spec:
       labels:
         app: database
     spec:
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: pvc-db
       containers:
       - name: database
         image: "albertoarostegui/backend"
@@ -21,5 +25,9 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+        volumeMounts:
+          - name: db-storage
+            mountPath: "var/lib/postgresql/data/pgdata"
+            
         ports:
         - containerPort: 5432
