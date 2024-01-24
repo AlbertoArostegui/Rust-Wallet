@@ -84,8 +84,10 @@ pub async fn create_new_user(json: web::Json<NewUser>, data: web::Data<AppState>
 
     use backend::schema::users::dsl::*;
 
+    // Hash the password to add security
     let (new_hashed_password, new_salt) = utils::hash_password(new_password);
     let (new_secret_key, new_public_key) = walgen::generate_keypair();
+
     let new_public_address = walgen::public_key_address(&new_public_key);
     let new_public_address = format!("{:?}", new_public_address);
 
