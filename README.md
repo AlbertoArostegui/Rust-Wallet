@@ -3,6 +3,8 @@
 
 Repositorio donde se actualizará el código para la entrega individual de Administración de Sistemas 2023
 
+Esta aplicación es un monedero crypto que se conecta a una red de prueba de Ethereum, cualquier usuario puede crearse un monedero y realizar transacciones con él. El stack utilizando fue Rust, POSTGRESQL, Apache, NGINX y Hashicorp Vault.
+
 El funcionamiento de la aplicacion es sencillo, simplemente ejecutando
 ```docker compose up``` y asegurándonos de que la máquina en la que se ejecuta permite el tráfico HTTP tendremos nuestra aplicación levantada.
 
